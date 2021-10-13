@@ -35,13 +35,13 @@ class Email(HTMLMixIn):
             return
         self.set_plain_text_content(source_code)
 
-    def send_email(self, content_type, sendInBlue):
+    def send_email(self, content_type, subject, sender, recipient, reply_to, sendInBlue):
         self.set_email_content(content_type)
         sendInBlue.configure(SENDINBLUE_API_KEY)
-        sendInBlue.send_email_via_sendinblue(self.__html_content, self.__plain_text_content)
+        sendInBlue.send_email_via_sendinblue(subject, self.__html_content, self.__plain_text_content, sender, recipient, reply_to)
 
 
 email = Email()
 sendInBlue = SendInBlue()
-
-email.send_email('text', sendInBlue)
+contact_details = {"name": "Stella Stoyneva" , "email": "stella.stoyneva@mentormate.com"}
+email.send_email('text', "Subject", contact_details, contact_details, contact_details, sendInBlue)
