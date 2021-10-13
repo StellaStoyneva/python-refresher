@@ -36,23 +36,37 @@ bank_data = [
     }
 ]
 
-def convert_to_datetime(value):
-    local = pytz.timezone(value['timezone'])
-    naive = datetime.strptime(value['last_transaction'], "%Y-%m-%d %H:%M:%S")
-    local_dt = local.localize(naive)
+class BancAccountDataSorter:
+    def __init__(self, bank_data):
+        self.__bank_data = bank_data
+    
+    def get_bank_data(self):
+        return self.__bank_data
+    
+    def set_bank_data(self, data):
+        self.__bank_data = data
+        
+    def __convert_to_datetime(self, value):
+        local = pytz.timezone(value['timezone'])
+        naive = datetime.strptime(value['last_transaction'], "%Y-%m-%d %H:%M:%S")
+        local_dt = local.localize(naive)
 
-    return local_dt
+        return local_dt
 
-def get_sorting_criteria(data):
-    data = [[v['account']['balance'], convert_to_datetime(v['account'])] for v in data.values()]
-    return data
+    def __get_sorting_criteria(self, data):
+        data = [[v['account']['balance'], self.__convert_to_datetime(v['account'])] for v in data.values()]
+        return data
 
-def get_sorted_data(data):
-    try:
-        sorted_result = sorted(bank_data, key=lambda i: get_sorting_criteria(i), reverse=True)
-        print(sorted_result)
-    except:
-        print("Invalid data")
+    def get_sorted_data(self):
+        bank_data = self.get_bank_data()
+        try:
+            sorted_result = sorted(bank_data, key=lambda i: self.__get_sorting_criteria(i), reverse=True)
+            self.set_bank_data(sorted_result)
+        
+        except Exception:
+            return "Invalid data"
 
-
-get_sorted_data(bank_data)
+bank_account_sorter = BancAccountDataSorter(bank_data)
+bank_account_sorter.get_sorted_data()
+sorted_data = bank_account_sorter.get_bank_data()
+print(sorted_data)
