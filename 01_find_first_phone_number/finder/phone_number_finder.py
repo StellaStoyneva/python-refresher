@@ -37,8 +37,8 @@ class PhoneNumberFinder(ProcessRegexMixIn):
             self.set_matches(pattern)
             result = [f'{self.__get_phonebook_value("name", x)} - {x}' for x in self.__matches if x in self.__get_phonebook_value('phones', x)]
             return result
-        except Exception:
-            return("Invalid data format")
+        except:
+            raise Exception("Invalid data format")
 
 phones = PhoneNumberFinder(phonebook_data)
 

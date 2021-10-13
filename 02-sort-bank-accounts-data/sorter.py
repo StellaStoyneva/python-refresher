@@ -64,7 +64,7 @@ class BancAccountDataSorter:
             self.set_bank_data(sorted_result)
         
         except Exception:
-            return "Invalid data"
+            raise Exception("Invalid data") 
 
 bank_account_sorter = BancAccountDataSorter(bank_data)
 bank_account_sorter.get_sorted_data()

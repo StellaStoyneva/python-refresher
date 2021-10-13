@@ -30,7 +30,8 @@ class TestSorter(unittest.TestCase):
             ]
         sorter = BancAccountDataSorter(initial_data)
         
-        self.assertEqual(sorter.get_sorted_data(), 'Invalid data')
+        with self.assertRaises(Exception):
+            sorter.get_sorted_data()
    
 
 if __name__ == "__main__":
