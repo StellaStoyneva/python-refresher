@@ -1,0 +1,10 @@
+certifi==2021.10.8
+html5lib==1.1
+python-dateutil==2.8.2
+python-dotenv==0.19.1
+pytz==2021.3
+regex==2021.10.8
+sib-api-v3-sdk==7.2.0
+six==1.16.0
+urllib3==1.26.7
+webencodings==0.5.1
