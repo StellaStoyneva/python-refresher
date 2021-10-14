@@ -1,8 +1,10 @@
 import unittest
+from unittest import TestCase
 
 from sorter import *
 
-class TestSorter(unittest.TestCase):
+
+class TestSorter(TestCase):
     def test_return_ordered_list_of_bank_accounts_data_in_decending_order_by_balance_and_last_transaction_date(self):
         initial_data = bank_data
         sorter = BancAccountDataSorter(initial_data)
@@ -36,3 +38,4 @@ class TestSorter(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    

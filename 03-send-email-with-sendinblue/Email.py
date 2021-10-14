@@ -1,47 +1,36 @@
-from SendInBlue import SendInBlue
+# pylint: disable=wildcard-import
 from HTMLMixIn import HTMLMixIn
-from constants import HTML_PATH, TXT_PATH, SENDINBLUE_API_KEY
+from constants import TXT_PATH, HTML_PATH, SENDINBLUE_API_KEY
+
+
 class Email(HTMLMixIn):
     def __init__(self):
         self.__html_content = None
         self.__plain_text_content = None
     
-    def get_content(self):
-        return self._content
-      
+    def get_html_content(self):
+        return self.__html_content
+
     def set_html_content(self, content):
-        self._content = content
+        self.__html_content = content
+
+    def get_text_content(self):
+        return self.__plain_text_content
 
     def set_plain_text_content(self, content):
         self.__plain_text_content = content
 
-    def validate_content_type(self, content_type):
-        if(content_type not in ['html', 'text']):
-            raise Exception("Invalid type content. Content can only be 'html' or 'text'" )
+    def set_email_contents(self):
+        text_file = open(TXT_PATH, 'r', encoding='utf-8')
+        text_source_code = text_file.read()
+        self.set_plain_text_content(text_source_code)
 
-    def get_content_source_code(self, content_type):
-        path = HTML_PATH if content_type =='html' else TXT_PATH
-        file = open(path, 'r', encoding='utf-8')
-        source_code = file.read()
+        html_file = open(HTML_PATH, 'r', encoding='utf-8')
+        html_source_code = html_file.read()
+        HTMLMixIn.validate_html_content(html_source_code)
+        self.set_html_content(html_source_code)
 
-        return source_code
-
-    def set_email_content(self, content_type):
-        self.validate_content_type(content_type)
-        source_code = self.get_content_source_code(content_type)
-        if content_type =='html': 
-            HTMLMixIn.validate_html_content(source_code) 
-            self.set_html_content(source_code)
-            return
-        self.set_plain_text_content(source_code)
-
-    def send_email(self, content_type, subject, sender, recipient, reply_to, sendInBlue):
-        self.set_email_content(content_type)
+    def send_email_via_sendinblue(self, subject, sender, recipient, reply_to, sendInBlue):
+        self.set_email_contents()
         sendInBlue.configure(SENDINBLUE_API_KEY)
-        sendInBlue.send_email_via_sendinblue(subject, self.__html_content, self.__plain_text_content, sender, recipient, reply_to)
-
-
-email = Email()
-sendInBlue = SendInBlue()
-contact_details = {"name": "Stella Stoyneva" , "email": "stella.stoyneva@mentormate.com"}
-email.send_email('text', "Subject", contact_details, contact_details, contact_details, sendInBlue)
+        sendInBlue.send_email(subject, self.__html_content, self.get_text_content(), sender, recipient, reply_to)

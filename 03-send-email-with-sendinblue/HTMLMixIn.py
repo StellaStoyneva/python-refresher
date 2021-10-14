@@ -1,3 +1,4 @@
+# pylint: disable=no-self-argument
 import html5lib
 from html5lib.html5parser import ParseError
 
@@ -7,4 +8,4 @@ class HTMLMixIn:
         try:
             html5parser.parse(html_content)
         except ParseError as e:
-            print('ERROR: Invalid HTML ->', str(e))
+            raise Exception('ERROR: Invalid HTML ->', str(e))
